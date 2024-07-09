@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class DiceRoller extends StatefulWidget {
@@ -9,20 +9,37 @@ class DiceRoller extends StatefulWidget {
   State<DiceRoller> createState() {
     return _DiceRollerState();
   }
-
 }
 
 
 
 class _DiceRollerState extends State<DiceRoller> {
 
-  var activeDice = 1;
-  final Random random = Random();
+  var _activeDice = 1;
+  Timer? _timer;
+  final Random _random = Random();
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   void rollDice() {
-    setState(() {
-      activeDice = random.nextInt(6) + 1;
-    });
+    _timer?.cancel();
+    _timer = Timer.periodic(
+      const Duration(milliseconds: 200),
+      (Timer timer) {
+        setState(() {
+          _activeDice = _random.nextInt(6) + 1;
+        });
+      }
+    );
+
+    Future.delayed(
+      Duration(seconds: _random.nextInt(2) + 1),
+      () => _timer?.cancel()
+    );
   }
 
 
@@ -32,7 +49,7 @@ class _DiceRollerState extends State<DiceRoller> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Image.asset(
-          'assets/images/dice-$activeDice.png',
+          'assets/images/dice-$_activeDice.png',
           width: 200,
         ),
         const SizedBox(height: 50),
