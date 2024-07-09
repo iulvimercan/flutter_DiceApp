@@ -47,6 +47,10 @@ class _DiceRollerState extends State<DiceRoller> {
     );
   }
 
+  bool _isRolling() {
+    return _timer?.isActive == true;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,15 +58,15 @@ class _DiceRollerState extends State<DiceRoller> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Opacity(
-            opacity: _timer?.isActive == true ? 0.5 : 1.0,
+            opacity: _isRolling() ? 0.5 : 1.0,
             child: Image.asset(
                 'assets/images/dice-$_activeDice.png',
-                width: _timer?.isActive == true ? 250 : 200,
+                width: _isRolling() ? 250 : 200,
             ),
         ),
         const SizedBox(height: 50),
         TextButton(
-            onPressed: rollDice,
+            onPressed: _isRolling() ? null : rollDice,
             style: TextButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: const Color.fromARGB(255, 57, 173, 255),
@@ -74,7 +78,7 @@ class _DiceRollerState extends State<DiceRoller> {
                     fontSize: 21
                 )
             ),
-            child: const Text('Roll Dice')),
+            child: Text(_isRolling() ? 'Rolling...' : 'Roll Dice')),
 
       ],
     );
