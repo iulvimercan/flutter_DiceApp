@@ -38,7 +38,12 @@ class _DiceRollerState extends State<DiceRoller> {
 
     Future.delayed(
       Duration(seconds: _random.nextInt(2) + 1),
-      () => _timer?.cancel()
+      () {
+        setState(() {
+          _timer?.cancel();
+          _activeDice = _random.nextInt(6) + 1;
+        });
+      }
     );
   }
 
@@ -48,9 +53,12 @@ class _DiceRollerState extends State<DiceRoller> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Image.asset(
-          'assets/images/dice-$_activeDice.png',
-          width: 200,
+        Opacity(
+            opacity: _timer?.isActive == true ? 0.5 : 1.0,
+            child: Image.asset(
+                'assets/images/dice-$_activeDice.png',
+                width: 200
+            ),
         ),
         const SizedBox(height: 50),
         TextButton(
