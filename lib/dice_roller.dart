@@ -57,7 +57,7 @@ class _DiceRollerState extends State<DiceRoller> {
             opacity: _timer?.isActive == true ? 0.5 : 1.0,
             child: Image.asset(
                 'assets/images/dice-$_activeDice.png',
-                width: 200
+                width: _timer?.isActive == true ? 250 : 200,
             ),
         ),
         const SizedBox(height: 50),
